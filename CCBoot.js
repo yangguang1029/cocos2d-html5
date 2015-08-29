@@ -667,6 +667,9 @@ cc.loader = /** @lends cc.loader# */{
             var xhr = this.getXMLHttpRequest(),
                 errInfo = "load " + url + " failed!";
             xhr.open("GET", url, true);
+            xhr.onerror = function(){
+                cb(errInfo);
+            };
             if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
                 // IE-specific logic here
                 xhr.setRequestHeader("Accept-Charset", "utf-8");
@@ -693,6 +696,9 @@ cc.loader = /** @lends cc.loader# */{
         if (!cc._isNodeJs) {
             var xhr = this.getXMLHttpRequest();
             xhr.open("GET", url, false);
+            xhr.onerror = function(){
+                cb(errInfo);
+            };
             if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
                 // IE-specific logic here
                 xhr.setRequestHeader("Accept-Charset", "utf-8");
@@ -714,7 +720,9 @@ cc.loader = /** @lends cc.loader# */{
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
         xhr.responseType = "arraybuffer";
-
+        xhr.onerror = function(){
+                cb(errInfo);
+            };
         xhr.onload = function () {
             var arrayBuffer = xhr.response; // Note: not oReq.responseText
             if (arrayBuffer) {
@@ -850,7 +858,7 @@ cc.loader = /** @lends cc.loader# */{
                 cc.log(err);
                 self.cache[url] = null;
                 delete self.cache[url];
-                cb();
+                cb(err);
             } else {
                 self.cache[url] = data;
                 cb(null, data);
