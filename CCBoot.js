@@ -696,9 +696,6 @@ cc.loader = /** @lends cc.loader# */{
         if (!cc._isNodeJs) {
             var xhr = this.getXMLHttpRequest();
             xhr.open("GET", url, false);
-            xhr.onerror = function(){
-                cb(errInfo);
-            };
             if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
                 // IE-specific logic here
                 xhr.setRequestHeader("Accept-Charset", "utf-8");
@@ -721,7 +718,7 @@ cc.loader = /** @lends cc.loader# */{
         xhr.open("GET", url, true);
         xhr.responseType = "arraybuffer";
         xhr.onerror = function(){
-                cb(errInfo);
+                cb("load " + url + " failed!");
             };
         xhr.onload = function () {
             var arrayBuffer = xhr.response; // Note: not oReq.responseText
